@@ -28,6 +28,9 @@ class Window(QtGui.QMainWindow):
         rightSplitter=QtGui.QSplitter(QtCore.Qt.Vertical,mainSplitter)#次窗口附着于主窗口
         self.dis_textedit=Edit(rightSplitter)#次窗口绑定HTML显示框
         self.setCentralWidget(mainSplitter)#添加主窗口到窗体
+        #=============================
+        #默认的文件
+        self.filename ="tmp/tmp.c"
                         
     def onopen(self):
         self.filename=QtGui.QFileDialog.getOpenFileName(self,'open')
@@ -39,13 +42,15 @@ class Window(QtGui.QMainWindow):
         objfile = str(self.filename)
         noextension = objfile.split('.')[0]#(objfile.split("/")[-1]).split('.')[0]
         cmd = 'gcc -o ' + noextension + ' ' + objfile
-        p=subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+        p=subprocess.Popen(cmd,shell=True,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)        
         retstr = p.stdout.read().decode('cp936')#编码注意
         if len(retstr):
             self.dis_textedit.setText(retstr)
         else:
             cmd = noextension + '.exe'
-            self.dis_textedit.setText(os.popen(cmd).read())
+            ep=subprocess.Popen(cmd,shell=True,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+            
+            self.dis_textedit.setText(ep.stdout.read().decode('cp936'))
         
     def onsave(self):
         f=open(self.filename,'w')

@@ -1,11 +1,8 @@
 #include<stdio.h>
-#include<string.h>
-int main()
+int main(int argc,char *argv[])
 {
-	char *str = "xueyong";
-	char s[]="xueyong";
-	printf("%d,%d\n",sizeof(str),sizeof(s));
-	printf("%d,%d\n",strlen(str),strlen(s));
-	printf("%s,%s\n",str,s);
-	return 0;
+	int a;
+	printf("input:");
+	scanf("%d",&a);
+	printf("he:%d",a);
 }
